@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section id="contact" class="contact">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Order History</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th scope="col">Name</th>
+                        <th scope="col">Transaction Id</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+
+                        <td>{{order.customer}}</td>
+                        <td>{{order.transaction_id}}</td>
+                        <td>{{order.date_orderd}}</td>
+                        <td><a href="{% url 'report' %}" class="btn btn-warning">Download</a></td>
+
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+{% endblock content %}

@@ -1,0 +1,97 @@
+from django.db import models
+from account.models import User
+# Create your models here.
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    pic = models.ImageField(default='250x250.png')
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Order(models.Model):
+    customer = models.ForeignKey(
+        User, on_delete=models.SET_NULL, blank=True, null=True)
+    date_orderd = models.DateTimeField(auto_now_add=True)
+    complete = models.BooleanField(default=False)
+    delivary = models.BooleanField(default=False)
+    cancel = models.BooleanField(default=False)
+    total = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    tax = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    gtotal = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    transaction_id = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return str(self.customer)
+
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+    @property
+    def get_tex_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return (total / 100) * 15
+
+
+
+    @property
+    def get_cart_items(self):
+        orderitem = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitem])
+        return total
+
+    @property
+    def shipping(self):
+        shipping = False
+        orderitem = self.orderitem_set.all()
+        for i in orderitem:
+            if i.product.digital == False:
+                shipping = True
+        return shipping
+
+
+class OrderItem(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(
+        Order, on_delete=models.SET_NULL, blank=True, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+
+
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total
+
+class Payment(models.Model):
+    ac_name = models.CharField(max_length=50)
+    ac_number = models.CharField(max_length=50)
+    tr_id = models.CharField(max_length=50)
+    customer = models.ForeignKey(
+        User, on_delete=models.SET_NULL, blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.ac_name
+
+class ShippingAddress(models.Model):
+    customer = models.ForeignKey(
+        User, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(
+        Order, on_delete=models.SET_NULL, blank=True, null=True)
+    address = models.TextField(null=True)
+
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.address

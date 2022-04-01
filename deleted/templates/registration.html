@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+
+  <div class="col-md-4 mt-5 mb-5" style=" margin: 0 auto; ">
+
+    <form class="form-signin p-5 shadow"
+      style="background:rgb(26 119 203 / 50%);border-radius: 20px; margin-top: 10px; margin-bottom: 10px; border: 4px solid white;"
+      enctype="multipart/form-data" method="post">
+      <h1 class="h3 mb-3 font-weight-normal">Please sign Up</h1>
+      {% csrf_token %}
+      {% for field in forms %}
+      <div class="fieldWrapper">
+        {{ field.errors }}
+
+
+
+        {{ field }}
+
+
+      </div>
+      {% endfor %}
+
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+
+    </form>
+
+
+  </div>
+</div>
+<script>
+  document.getElementById('id_password1').classList.add('form-control', 'mb-2')
+  document.getElementById('id_password1').setAttribute("placeholder", "Password");
+  document.getElementById('id_password2').classList.add('form-control', 'mb-2')
+  document.getElementById('id_password2').setAttribute("placeholder", "Again Password");
+
+  document.getElementById('id_user_type').classList.add('form-control', 'mb-2')
+  document.getElementById('id_image').classList.add('form-control', 'mb-2')
+</script>
+{% endblock content %}

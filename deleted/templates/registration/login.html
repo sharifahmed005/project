@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+
+
+  <div class="col-md-4 mt-5 mb-5" style="margin:0 auto;">
+
+    <form class="form-signin p-5 shadow"
+      style="background:rgb(26 119 203 / 50%); border-radius: 20px; margin-top: 10px; margin-bottom: 10px; border: 4px solid white;"
+      enctype="multipart/form-data" method="post">
+      <h2 class="h3 mb-3 font-weight-normal">Please signin</h2>
+      {% if messages %}
+      <div class="alert alert-primary">
+        {% for message in messages %}
+        <span{% if message.tags %} id="message-{{ message.tags }}" {% endif %}>{{ message }}</span>
+          {% endfor %}
+      </div>
+      {% endif %}
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="fieldWrapper">
+        {{ field.errors }}
+
+
+
+        {{ field }}
+
+
+      </div>
+      {% endfor %}
+
+
+      <button class="btn btn-lg btn-primary btn-sm" type="submit">Sign Up</button>
+
+    </form>
+    <div class="reg_or_forget d-flex justify-content-between">
+      <div>New here
+        <a class="link" href="{% url 'registration' %}">Register</a>
+      </div>
+      <div>
+        <a class="link text-danger" href="{% url 'password_reset' %}">Forget Password?</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById('id_username').classList.add('form-control', 'mb-2')
+  document.getElementById('id_username').setAttribute("placeholder", "Username");
+  document.getElementById('id_password').classList.add('form-control', 'mb-2')
+  document.getElementById('id_password').setAttribute("placeholder", "Password");
+
+</script>
+{% endblock content %}

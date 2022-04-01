@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}
+Checkout
+{% endblock title %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 shadow-sm p-3">
+          
+
+              
+               
+
+
+                    
+                                <form action="{% url 'process_order' %}" method="POST">
+                                {% csrf_token %}
+
+                                  <div class="input-group mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input mt-4" type="radio" name="ac_name" id="inlineRadio1" value="Bkash">
+                                        <label class="form-check-label" for="inlineRadio1"> <img height="80" width="80" src="/media/b.png" alt=""> (01000123456)</label>
+                                    </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input mt-4" type="radio" name="ac_name" id="inlineRadio2" value="Nagad">
+                                        <label class="form-check-label" for="inlineRadio2"> <img height="80" width="80" src="/media/n.png" alt=""> (01000123456)</label>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                              
+                                    <textarea required class="form-control" name="address" id="shipping-address" cols="30"
+                                        rows="2" placeholder="Address"></textarea>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input required type="text" class="form-control" placeholder="Account Number" name="ac_number">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input required type="text" class="form-control" placeholder="Transation Id" name="tr_id">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input  type="submit" value="Payment" class="btn btn-primary">
+                                   
+                                </div>
+                                
+                            </form>
+                
+
+
+           
+             
+            </div>
+
+            <div class="col-md-7 shadow-sm p-5">
+                {% for item in items %}
+                <div class="d-flex justify-content-between align-self-center">
+                    <!-- product -->
+                    <div class="">
+                        <img height="100px" src="{{ item.product.pic.url }}" alt="">
+                    </div>
+                    <div class="">
+                        <span class="">{{ item.product.name }}</span>
+                    </div>
+                    <div class="">
+                        <span class="text-center w-1/5 font-semibold text-sm"> {{item.get_total}}</span>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+
+                <hr class="pb-6 mt-6">
+                <div class="my-4 mt-6 -mx-2 lg:flex">
+
+                    <div class="lg:px-2 lg:w-full">
+
+                        <div class="p-4">
+
+
+
+                            <div class="d-flex justify-content-between" style="font-weight: bold;">
+                                <div class="">
+                                    Total <span class="text-sm">(Quantity: {{order.get_cart_items}})</span>
+                                </div>
+                                <div class="">
+                                    {{order.get_cart_total}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</section>
+
+
+<script>
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function (e) {
+        e.preventDefault()
+        document.getElementById('form-button').classList.add('d-none')
+        document.getElementById('payment-info').classList.remove('d-none')
+    })
+    function submitFormData() {
+
+        shipping = form.address.value
+
+        var url = '/process_order/'
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'applicaiton/json',
+                'X-CSRFToken': csrftoken,
+            },
+
+            body: JSON.stringify({ 'address': shipping }),
+
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success', data);
+                alert('Transation completed')
+
+
+
+                window.location.href = "{% url 'products' %}"
+            })
+    };
+</script>
+{% endblock content %}

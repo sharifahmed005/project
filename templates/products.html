@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="header_gp" style="margin-top: 120px;">
+
+</div>
+
+<section id="services" class="services">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Product</h2>
+            <div class="col-md-6  mx-auto">
+
+                <p>Bangladesh is primarily an agrarian economy. Agriculture is the single largest producing sector of economy since it comprises about 30% of the country's  and employing around 66% of the total labor force. </p>
+            </div>
+            <div class="col-md-4 mb-2 mt-4 mx-auto">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" placeholder="search" name="search" class="form-control">
+                </form>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            {% for product in products %}
+
+            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mb-4">
+                <div class="card">
+                    <img src="{{product.pic.url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{product.name}}</h5>
+                        <p class="card-text">TK. {{product.price}}</p>
+
+                        {% if request.user.is_authenticated %}
+                        <button data-product="{{product.id}}" data-action="add"
+                            class="update-cart btn btn-success mt-2">Add
+                            to cart</button>
+                        {% else %}
+
+                        <a href="{% url 'login' %}" title="Please Login for Add to cart" class="btn btn-info mt-2">Add
+                            to cart</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock content %}

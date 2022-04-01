@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+Blog
+{% endblock title %}
+
+{% block content %}
+{% load humanize %}
+
+
+
+<section id="team" class="team section-bg">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+
+        <div class="blog details">
+            <img class="img-fluid" src="{{ blog.image.url }}" alt="blog">
+            <div class="pt-5 ">
+                <div class="d-flex justify-content-between">
+
+                    <p class=" bg-white rounded" style="padding: 5px 10px; font-weight: bold;">Auth: <span
+                            style="font-weight: lighter;">{{blog.author}}</span>
+                    </p>
+                    <p class="float-right bg-white text-gray-700 rounded" style="padding: 5px 10px; font-weight: bold;">
+                        Posted:
+                        <span style="font-weight: lighter;">
+
+                            {{ blog.created_at|naturaltime }}
+                        </span>
+                    </p>
+                </div>
+                <h2>{{blog.title}}</h2>
+                <p class="leading-relaxed mb-3">{{blog.details}}</p>
+                <hr>
+
+
+            </div>
+
+
+
+
+            <div class="d-flex flex-column col-md-12">
+
+                <div class="coment-bottom bg-white p-2 px-4">
+                    <form action="{% url 'comment_post' %}" method="post">
+                        {% csrf_token %}
+                        <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                            <img class="img-fluid img-responsive rounded-circle mr-2" src="/media/default.png"
+                                width="38">
+
+                            <input type="text" name="blog" class="form-control mr-3" hidden value="{{blog.id}}">
+                            <input type="text" name="comment" class="form-control mr-3" placeholder="Add comment">
+                            {% if request.user.is_authenticated %}
+
+
+                            <button class="btn btn-primary" type="submit">Comment</button>
+                            {% else %}
+                            <button class="btn btn-primary" title="Please login before comment" disabled
+                                type="button">Comment</button>
+                            {% endif %}
+                        </div>
+                    </form>
+                    <div class="commented-section mt-2">
+                        {% for comment in comments %}
+
+                        <div class="d-flex flex-row align-items-center commented-user">
+                            <h5 class="mr-4">{{comment.commenter}} </h5><span class="mb-1 ml-4 "
+                                style="font-weight: lighter;margin-left: 20px;">
+                                {{ comment.created_at|naturaltime }}
+                            </span>
+                        </div>
+                        <div class="comment-text-sm mb-4"><span>{{comment.comment}}</span>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+
+
+
+{% endblock content %}

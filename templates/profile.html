@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="header_gp" style="margin-top: 120px;">
+
+</div>
+
+<section id="services" class="services">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card text-center pt-4" id="pr" style="align-items: center;">
+                    <img height="100" width="100" src="{{request.user.image.url}}" class="rounded-circle" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{request.user.first_name}} {{request.user.last_name}}</h5>
+                        <h6 class="card-title">Username : {{request.user.username}}</h6>
+                        <p style="background: #166efd47" class="card-text p-2 rounded">{{ request.user.about}}</p>
+                        <button id="profile_edit" class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+                <div class="card text-center pt-4" id="pr_edit" style="align-items: center;display: none;">
+
+                    <div class="card-body">
+                        <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for field in forms %}
+                            <div class="fieldWrapper">
+                                {{ field.errors }}
+
+
+
+                                {{ field }}
+
+
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById("profile_edit").addEventListener("click", hide_profile);
+    function hide_profile() {
+        console.log('working')
+        document.getElementById('pr').style.display = 'none'
+        document.getElementById('pr_edit').style.display = 'block'
+    }
+    document.getElementById('id_image').classList.add('form-control', 'mb-2')
+</script>
+
+{% endblock content %}

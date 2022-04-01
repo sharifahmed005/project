@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+Purchess Traking
+{% endblock title %}
+
+{% block content %}
+
+
+
+
+<section class="text-gray-600 body-font overflow-hidden">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Purchase Tracking</h2>
+                <div class="purchess_list shadow p-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Transition ID</th>
+                                <th scope="col">Order Status</th>
+                                <th scope="col">Cancel Status</th>
+                                <th scope="col">Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order %}
+                            <tr>
+                                <td>{{item.transaction_id}}</td>
+                                <td>
+                                {% if item.delivary %}
+                                delivered
+
+                                {% else %}
+                                {% if item.cancel %}
+                                Canceled
+                                {% else %}
+                                    {% if item.complete %}
+                                            On Progress To Delivery
+                                            {% else %}
+
+                                                   Pending 
+
+                                            {% endif %}
+                                      {% endif %}
+                                {% endif %}
+                              
+                                </td>
+                                <td>
+                                      {% if item.cancel %}
+                                True
+
+                                {% else %}
+                                    None
+                                {% endif %}
+                                 {% if not item.delivary and not item.cancel %}
+                                 <a class="btn btn-primary" href="?order_id={{ item.id }}"> Cancel </a>
+                                   {% endif %}
+                                </td>
+                                <td>
+                                {% if item.cancel %}
+                                Refunded
+                                 {% else %}
+                                    Paid
+                                {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
